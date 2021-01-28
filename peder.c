@@ -4,32 +4,45 @@
 #include <stdio.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <string.h>
 
 #define LOCAL_PORT 80
-#define BACK_LOGG 10 // Størrelse på for kø ventende forespørsler
+#define BACK_LOGG 10 // Størrelse på for kø ventende forespørsler 
+#define BREV_STR 100
 
 void deamon() {
 
-        if (fork()!=0) {
-                exit(0);
-        }
+	if (fork()!=0) {
+		exit(0);
+	}
 
-        setsid();
+	setsid();
 
-        signal(SIGHUP, SIG_IGN);
+	signal(SIGHUP, SIG_IGN);
 
-        if (fork()!=0) {
-                exit(0);
-        }
+	if (fork()!=0) {
+		exit(0);
+	}
 
-        close(0);
-        close(1);       //Lukker stdinn og stdout
-        int file = open("logg.txt", O_WRONLY|O_CREAT|O_APPEND, 0666);
-        dup2(file, 2);
+	close(0);
+	close(1);	//Lukker stdinn og stdout
+	int file = open("logg.txt", O_WRONLY|O_CREAT|O_APPEND, 0666);
+	dup2(file, 2);
 
-        //printf("Daemonizing succesfull");
+
+	//printf("Daemonizing succesfull");
 }
 
+int exists(const char *fname)
+{
+    FILE *file;
+    if ((file = fopen(fname, "r")))
+    {
+        fclose(file);
+        return 1;
+    }
+    return 0;
+}
 
 int main ()
 {
@@ -37,10 +50,16 @@ int main ()
   struct sockaddr_in  lok_adr;
   int sd, ny_sd;
 
+  char brev_buffer[BREV_STR];
+  int brv_len;
+
   deamon();
 
+  int file = open("tjener.txt", O_WRONLY|O_CREAT, 0666);
+  dup2(file, 3);
+
   char c;
-  FILE *fp = fopen("/var/www/index.asis", "r");
+//  FILE *fp = fopen("/var/www/index.asis", "r");
 
   // Setter opp socket-strukturen
   sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -50,7 +69,7 @@ int main ()
 
   // Initierer lokal adresse
   lok_adr.sin_family      = AF_INET;
-  lok_adr.sin_port        = htons((u_short)LOCAL_PORT);
+  lok_adr.sin_port        = htons((u_short)LOCAL_PORT); 
   lok_adr.sin_addr.s_addr = htonl(         INADDR_ANY);
 
   // Kobler sammen socket og lokal adresse
@@ -66,16 +85,24 @@ int main ()
     // Aksepterer mottatt forespørsel
     ny_sd = accept(sd, NULL, NULL);
 
-    fp = fopen("/var/www/index.asis", "r");
+//    fp = fopen("/var/www/index.asis", "r");
+
 
     if(0==fork()) {
 
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
-      //Leser inn første linje og lagrer request
-      char* line = NULL;
-      FILE* request = fopen(ny_sd, "r");
-      
+      //Lagrer spørring
+      brv_len = read(ny_sd, brev_buffer, BREV_STR);
+      char* fname = strtok(brev_buffer, " ");
+      fname = strtok(NULL, " ");
+
+      if (fname[0] == '/')
+	fname++;
+
+      printf("%s\n", fname);
+      fflush(stdout);
+      close(2);
 
       //Endrer webroten til ./www/
       chdir("./www/");
@@ -90,13 +117,26 @@ int main ()
       //printf("\n");
       //printf("Hallo klient!\n");
 
-        //Read contents of file
-        c = fgetc(fp);
-        while (c != EOF) {
-                printf ("%c", c);
-                c = fgetc(fp);
+      //Sjekker om fil eksisterer
+      if (exists(fname) == 1) {
+        printf("Filen eksisterer!");
+
+        //Åpner filen
+        FILE *file = fopen(fname,"r");
+        if(file != NULL) {
+          char line[128];
+          while(fgets( line, sizeof line, file) != NULL) {
+            fputs ( line, stdout );
+          }
+          fclose ( file );
         }
-        fclose(fp);
+
+      } else {
+        printf("File not found");
+      }
+
+
+
       fflush(stdout);
 
       // Sørger for å stenge socket for skriving og lesing
