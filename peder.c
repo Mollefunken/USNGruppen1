@@ -33,6 +33,7 @@ void deamon() {
 	//printf("Daemonizing succesfull");
 }
 
+//Sjekker om filen eksisterer
 int exists(const char *fname)
 {
     FILE *file;
@@ -42,6 +43,17 @@ int exists(const char *fname)
         return 1;
     }
     return 0;
+}
+
+//Sjekk om filtypen er en av de støttede filtypene
+int supports(const char *ftype) {
+	const char *support = "asis";
+
+	printf("%s\n%s", ftype, support);
+	if (strcmp(ftype, support) == 0) {
+		return 1;
+	}
+	return 0;
 }
 
 int main ()
@@ -94,11 +106,18 @@ int main ()
 
       //Lagrer spørring
       brv_len = read(ny_sd, brev_buffer, BREV_STR);
-      char* fname = strtok(brev_buffer, " ");
+      char* fname = strtok(brev_buffer, "/");
       fname = strtok(NULL, " ");
 
-      if (fname[0] == '/')
-	fname++;
+	printf("%s\n", fname);
+
+      char temp[100];
+	strcpy(temp, fname);
+
+
+      char* buff = strtok(temp, ".");
+      char* ftype = strtok(NULL, " ");
+	printf("%s", ftype);
 
       printf("%s\n", fname);
       fflush(stdout);
@@ -116,6 +135,14 @@ int main ()
       //printf("Content-Type: text/plain\n");
       //printf("\n");
       //printf("Hallo klient!\n");
+
+      //Sjekker om filtype støttes
+     if (supports(ftype) == 1) {
+	printf("SUpported");
+     } else {
+	printf("File ist not supported");
+     }
+
 
       //Sjekker om fil eksisterer
       if (exists(fname) == 1) {
