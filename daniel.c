@@ -15,24 +15,25 @@
 #define BREV_STR 100
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 
+int fil_eksisterer(char *filnavn);
+int filtype(char *filnavn);
+void print_feil(int feilKode);
+void print_header();
+
 int main ()
 {
+  chdir("./var/www");
+  chroot(".");
 
   struct sockaddr_in  lok_adr;
   struct sockaddr_in fj_adr;
 
-  int sd, ny_sd, ja;
+  int sd, ny_sd;
 
   char brev_buffer[BREV_STR];
   socklen_t adr_len;
   int brv_len;
 
-  DIR *d;
-  struct dirent *dir;
-  d = opendir(".");
-
-  int file = open("tjener.txt", O_WRONLY|O_CREAT, 0666);
-  dup2(file, 3);
 
   // Setter opp socket-strukturen
   sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -65,22 +66,24 @@ int main ()
 
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
-      printf("HTTP/1.1 200 OK\n");
-      printf("Content-Type: text/plain\n");
-      printf("\n");
-      printf("Hallo klient!\n");
-      printf("\nHer går skillet\n");
-
-      fflush(stdout);
-
       brv_len = read(ny_sd, brev_buffer, BREV_STR);
 
-      char *filnavn = strtok(brev_buffer, " ");
+
+
+      char *filnavn = strtok(brev_buffer, "/");
       filnavn = strtok(NULL, " ");
 
-      printf("%s\n", filnavn);
+//      print_header();
 
-      fflush(stdout);
+      int a = filtype(filnavn);
+
+      if(a == 0)
+      {
+	fil_eksisterer(filnavn);
+      }
+      else
+      	print_feil(415);
+
 
       close(2);
 
@@ -96,3 +99,61 @@ int main ()
   }
   return 0;
 }
+
+int fil_eksisterer(char *filnavn)
+{
+	FILE *file;
+	if ((file = fopen(filnavn, "r")))
+	{
+		char line[128];
+		while(fgets(line, sizeof line, file) != NULL)
+			fputs(line, stdout);
+	}
+	else
+		print_feil(404);
+
+	fflush(stdout);
+}
+
+int filtype(char *filnavn)
+{
+	char strKopi[30];
+	strcpy(strKopi, filnavn);
+	char *token = strtok(strKopi, ".");
+	char *filtype = strtok(NULL, " ");
+
+	printf("%s", filtype);
+
+	return strcmp(filtype, "asis");
+
+}
+
+void print_feil(int feilKode)
+{
+	switch(feilKode)
+	{
+		case 415:
+			printf("HTTP/1.1 422 Unprocessable Entity\n");
+			fflush(stdout);
+			break;
+		case 404:
+			printf("HTTP/1.1 404 Not Found\n");
+			fflush(stdout);
+			break;
+		default:
+			printf("HTTP/1.1 400 Bad Request");
+			fflush(stdout);
+	}
+}
+
+void print_header()
+{
+	printf("HTTP/1.1 200 OK\n");
+	printf("Content-Type: text/plain\n");
+	printf("\n");
+	printf("Hallo klient!\n");
+
+	fflush(stdout);
+}
+
+
