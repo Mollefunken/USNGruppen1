@@ -79,118 +79,121 @@ void errorHandler(int errorCode)
 int main ()
 {
 
-  struct sockaddr_in  lok_adr;
-  int sd, ny_sd;
+    struct sockaddr_in  lok_adr;
+    int sd, ny_sd;
 
-  char brev_buffer[BREV_STR];
-  int brv_len;
+    char brev_buffer[BREV_STR];
+    int brv_len;
 
-  deamon();
+    deamon();
 
-  int file = open("tjener.txt", O_WRONLY|O_CREAT, 0666);
-  dup2(file, 3);
+    int file = open("tjener.txt", O_WRONLY|O_CREAT, 0666);
+    dup2(file, 3);
 
-  char c;
+    char c;
 
-  // Setter opp socket-strukturen
-  sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    // Setter opp socket-strukturen
+    sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-  // For at operativsystemet ikke skal holde porten reservert etter tjenerens død
-  setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
+    // For at operativsystemet ikke skal holde porten reservert etter tjenerens død
+    setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
 
-  // Initierer lokal adresse
-  lok_adr.sin_family      = AF_INET;
-  lok_adr.sin_port        = htons((u_short)LOCAL_PORT); 
-  lok_adr.sin_addr.s_addr = htonl(         INADDR_ANY);
+    // Initierer lokal adresse
+    lok_adr.sin_family      = AF_INET;
+    lok_adr.sin_port        = htons((u_short)LOCAL_PORT); 
+    lok_adr.sin_addr.s_addr = htonl(         INADDR_ANY);
 
-  // Kobler sammen socket og lokal adresse
-  if ( 0==bind(sd, (struct sockaddr *)&lok_adr, sizeof(lok_adr)) )
-  	fprintf(stderr, "Prosess %d er knyttet til port %d.\n", getpid(), LOCAL_PORT);
-  else
-  	exit(1);
+    // Kobler sammen socket og lokal adresse
+    if ( 0==bind(sd, (struct sockaddr *)&lok_adr, sizeof(lok_adr)) )
+    	fprintf(stderr, "Prosess %d er knyttet til port %d.\n", getpid(), LOCAL_PORT);
+    else
+  	    exit(1);
     
-  //Endrer webroten til ./www/
-  chdir("./www/");
-  chroot(".");
+    //Endrer webroten til ./www/
+    chdir("./www/");
+    chroot(".");
 
-  //Setter bruker- og gruppeID til noe random?
-  setuid(55555);
-  setgid(55555);
+    //Setter bruker- og gruppeID til noe random?
+    setuid(55555);
+    setgid(55555);
 
-  // Venter på forespørsel om forbindelse
-  listen(sd, BACK_LOGG);
-  while(1)
-  {
-
-    // Aksepterer mottatt forespørsel
-    ny_sd = accept(sd, NULL, NULL);
-
-
-    if(0==fork()) 
+    // Venter på forespørsel om forbindelse
+    listen(sd, BACK_LOGG);
+    while(1)
     {
 
-      dup2(ny_sd, 1); // redirigerer socket til standard utgang
-
-      //Lagrer spørring
-      brv_len = read(ny_sd, brev_buffer, BREV_STR);
-      char* fname = strtok(brev_buffer, "/");
-      fname = strtok(NULL, " ");
-
-      //printf("%s\n", fname);
-
-      char temp[100];
-      strcpy(temp, fname);
+      // Aksepterer mottatt forespørsel
+      ny_sd = accept(sd, NULL, NULL);
 
 
-      char* buff = strtok(temp, ".");
-      char* ftype = strtok(NULL, " ");
-//    printf("%s", ftype);
-
-//    printf("%s\n", fname);
-      fflush(stdout);
-      close(2);
-
-      //printf("HTTP/1.1 200 OK\n");
-      //printf("Content-Type: text/plain\n");
-      //printf("\n");
-      //printf("Hallo klient!\n");
-
-      //Sjekker om filtype støttes
-      if (supports(ftype) == 1) 
+      if(0==fork()) 
       {
 
-	 //Åpner filen
-         FILE *file;
-	 //Sjekker om filen eksisterer
-         if(file = fopen(fname, "r")) 
-	 {
-            char line[128];
-            while(fgets( line, sizeof line, file) != NULL) 
-	    {
-            	fputs ( line, stdout );
-            }
-            fclose ( file );
-        
+        dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
-      } else {
-        errorHandler(404);
+        //Lagrer spørring
+        brv_len = read(ny_sd, brev_buffer, BREV_STR);
+        char* fname = strtok(brev_buffer, "/");
+        fname = strtok(NULL, " ");
+
+        //printf("%s\n", fname);
+
+        char temp[100];
+        strcpy(temp, fname);
+
+
+        char* buff = strtok(temp, ".");
+        char* ftype = strtok(NULL, " ");
+//      printf("%s", ftype);
+
+//      printf("%s\n", fname);
+        fflush(stdout);
+        close(2);
+
+        //printf("HTTP/1.1 200 OK\n");
+        //printf("Content-Type: text/plain\n");
+        //printf("\n");
+        //printf("Hallo klient!\n");
+
+        //Sjekker om filtype støttes
+        if (supports(ftype) == 1) 
+        {
+  
+	       //Åpner filen
+           FILE *file;
+	       //Sjekker om filen eksisterer
+           if(file = fopen(fname, "r")) 
+	       {
+		       char line[128];
+			   while(fgets( line, sizeof line, file) != NULL) 
+	           {
+			       fputs ( line, stdout );
+               }
+               fclose ( file );
+			} 
+			else 
+			{
+                errorHandler(404);
+			}
+		} 
+		else 
+		{
+	        errorHandler(415);
+        }
+
+
+        fflush(stdout);
+
+        // Sørger for å stenge socket for skriving og lesing
+        // NB! Frigjør ingen plass i fildeskriptortabellen
+        shutdown(ny_sd, SHUT_RDWR);
+        exit(0);
       }
-     } else {
-	errorHandler(415);
-     }
 
-
-      fflush(stdout);
-
-      // Sørger for å stenge socket for skriving og lesing
-      // NB! Frigjør ingen plass i fildeskriptortabellen
-      shutdown(ny_sd, SHUT_RDWR);
-      exit(0);
+      else 
+	  {
+          close(ny_sd);
+      }
     }
-
-    else {
-      close(ny_sd);
-    }
-  }
   return 0;
 }
