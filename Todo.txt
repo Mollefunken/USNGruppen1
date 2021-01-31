@@ -10,6 +10,7 @@
   - text/css
   - application/json
  Antar dette betyr at eks. 192.168.10.117/llama.png skal levere akkurat den filen i systemet.
+ Antar at tjener både skal støtte og gi fil av hver type
   Mulighet: Bruk /etc/mime-types
 
 2. Kjøre serveren i busybox-container
