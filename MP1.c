@@ -159,28 +159,27 @@ int main ()
         if (supports(ftype) == 1) 
         {
   
-	       //Åpner filen
-           FILE *file;
-	       //Sjekker om filen eksisterer
-           if(file = fopen(fname, "r")) 
-	       {
-		       char line[128];
-			   while(fgets( line, sizeof line, file) != NULL) 
-	           {
-			       fputs ( line, stdout );
-               }
-               fclose ( file );
-			} 
-			else 
-			{
+	    //Åpner filen
+            FILE *file;
+	    //Sjekker om filen eksisterer
+            if(file = fopen(fname, "r")) 
+	    {
+	        char line[128];
+		while(fgets( line, sizeof line, file) != NULL) 
+	        {
+		    fputs ( line, stdout );
+                }
+                fclose ( file );
+	    } 
+	    else 
+	    {
                 errorHandler(404);
-			}
-		} 
-		else 
-		{
-	        errorHandler(415);
+	    }
+	} 
+	else 
+	{
+	    errorHandler(415);
         }
-
 
         fflush(stdout);
 
@@ -191,7 +190,7 @@ int main ()
       }
 
       else 
-	  {
+      {
           close(ny_sd);
       }
     }
