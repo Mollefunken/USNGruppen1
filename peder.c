@@ -10,9 +10,11 @@
 #define BACK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 #define BREV_STR 100
 
-void deamon() {
+void deamon() 
+{
 
-	if (fork()!=0) {
+	if (fork()!=0) 
+	{
 		exit(0);
 	}
 
@@ -20,7 +22,8 @@ void deamon() {
 
 	signal(SIGHUP, SIG_IGN);
 
-	if (fork()!=0) {
+	if (fork()!=0) 
+	{
 		exit(0);
 	}
 
@@ -31,7 +34,8 @@ void deamon() {
 }
 
 //Sjekker om filen eksisterer
-int exists(const char *fname) {
+int exists(const char *fname) 
+{
     FILE *file;
     if ((file = fopen(fname, "r")))
     {
@@ -42,17 +46,20 @@ int exists(const char *fname) {
 }
 
 //Sjekk om filtypen er en av de støttede filtypene
-int supports(const char *ftype) {
+int supports(const char *ftype) 
+{
 	const char *support = "asis";
 
 //	printf("%s\n%s", ftype, support);
-	if (strcmp(ftype, support) == 0) {
+	if (strcmp(ftype, support) == 0) 
+	{
 		return 1;
 	}
 	return 0;
 }
 
-void errorHandler(int errorCode) {
+void errorHandler(int errorCode) 
+{
 	switch(errorCode)
 	{
 		case 415:
@@ -98,27 +105,29 @@ int main ()
 
   // Kobler sammen socket og lokal adresse
   if ( 0==bind(sd, (struct sockaddr *)&lok_adr, sizeof(lok_adr)) )
-    fprintf(stderr, "Prosess %d er knyttet til port %d.\n", getpid(), LOCAL_PORT);
+  	fprintf(stderr, "Prosess %d er knyttet til port %d.\n", getpid(), LOCAL_PORT);
   else
-    exit(1);
+  	exit(1);
     
-    //Endrer webroten til ./www/
-      chdir("./www/");
-      chroot(".");
+  //Endrer webroten til ./www/
+  chdir("./www/");
+  chroot(".");
 
-      //Setter bruker- og gruppeID til noe random?
-      setuid(55555);
-      setgid(55555);
+  //Setter bruker- og gruppeID til noe random?
+  setuid(55555);
+  setgid(55555);
 
   // Venter på forespørsel om forbindelse
   listen(sd, BACK_LOGG);
-  while(1){
+  while(1)
+  {
 
     // Aksepterer mottatt forespørsel
     ny_sd = accept(sd, NULL, NULL);
 
 
-    if(0==fork()) {
+    if(0==fork()) 
+    {
 
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
@@ -130,14 +139,14 @@ int main ()
       //printf("%s\n", fname);
 
       char temp[100];
-	strcpy(temp, fname);
+      strcpy(temp, fname);
 
 
       char* buff = strtok(temp, ".");
       char* ftype = strtok(NULL, " ");
-//	printf("%s", ftype);
+//    printf("%s", ftype);
 
-//      printf("%s\n", fname);
+//    printf("%s\n", fname);
       fflush(stdout);
       close(2);
 
@@ -147,17 +156,20 @@ int main ()
       //printf("Hallo klient!\n");
 
       //Sjekker om filtype støttes
-     if (supports(ftype) == 1) {
+      if (supports(ftype) == 1) 
+      {
 
-	//Åpner filen
-        FILE *file;
-	//Sjekker om filen eksisterer
-        if(file = fopen(fname, "r")) {
-          char line[128];
-          while(fgets( line, sizeof line, file) != NULL) {
-            fputs ( line, stdout );
-          }
-          fclose ( file );
+	 //Åpner filen
+         FILE *file;
+	 //Sjekker om filen eksisterer
+         if(file = fopen(fname, "r")) 
+	 {
+            char line[128];
+            while(fgets( line, sizeof line, file) != NULL) 
+	    {
+            	fputs ( line, stdout );
+            }
+            fclose ( file );
         
 
       } else {
