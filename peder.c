@@ -28,14 +28,10 @@ void deamon() {
 	close(1);	//Lukker stdinn og stdout
 	int file = open("logg.txt", O_WRONLY|O_CREAT|O_APPEND, 0666);
 	dup2(file, 2);
-
-
-	//printf("Daemonizing succesfull");
 }
 
 //Sjekker om filen eksisterer
-int exists(const char *fname)
-{
+int exists(const char *fname) {
     FILE *file;
     if ((file = fopen(fname, "r")))
     {
@@ -49,11 +45,28 @@ int exists(const char *fname)
 int supports(const char *ftype) {
 	const char *support = "asis";
 
-	printf("%s\n%s", ftype, support);
+//	printf("%s\n%s", ftype, support);
 	if (strcmp(ftype, support) == 0) {
 		return 1;
 	}
 	return 0;
+}
+
+void errorHandler(int errorCode) {
+	switch(errorCode)
+	{
+		case 415:
+			printf("HTTP/1.1 415 Unsupported Media Type\n");
+			fflush(stdout);
+			break;
+		case 404:
+			printf("HTTP/1.1 404 Not Found\n");
+			fflush(stdout);
+			break;
+		default:
+			printf("HTTP/1.1 400 Bad Request");
+			fflush(stdout);
+	}
 }
 
 int main ()
@@ -71,7 +84,6 @@ int main ()
   dup2(file, 3);
 
   char c;
-//  FILE *fp = fopen("/var/www/index.asis", "r");
 
   // Setter opp socket-strukturen
   sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -89,6 +101,14 @@ int main ()
     fprintf(stderr, "Prosess %d er knyttet til port %d.\n", getpid(), LOCAL_PORT);
   else
     exit(1);
+    
+    //Endrer webroten til ./www/
+      chdir("./www/");
+      chroot(".");
+
+      //Setter bruker- og gruppeID til noe random?
+      setuid(55555);
+      setgid(55555);
 
   // Venter på forespørsel om forbindelse
   listen(sd, BACK_LOGG);
@@ -96,8 +116,6 @@ int main ()
 
     // Aksepterer mottatt forespørsel
     ny_sd = accept(sd, NULL, NULL);
-
-//    fp = fopen("/var/www/index.asis", "r");
 
 
     if(0==fork()) {
@@ -109,7 +127,7 @@ int main ()
       char* fname = strtok(brev_buffer, "/");
       fname = strtok(NULL, " ");
 
-	printf("%s\n", fname);
+      //printf("%s\n", fname);
 
       char temp[100];
 	strcpy(temp, fname);
@@ -117,19 +135,11 @@ int main ()
 
       char* buff = strtok(temp, ".");
       char* ftype = strtok(NULL, " ");
-	printf("%s", ftype);
+//	printf("%s", ftype);
 
-      printf("%s\n", fname);
+//      printf("%s\n", fname);
       fflush(stdout);
       close(2);
-
-      //Endrer webroten til ./www/
-      chdir("./www/");
-      chroot(".");
-
-      //Setter bruker- og gruppeID til noe random?
-      setuid(55555);
-      setgid(55555);
 
       //printf("HTTP/1.1 200 OK\n");
       //printf("Content-Type: text/plain\n");
@@ -138,30 +148,24 @@ int main ()
 
       //Sjekker om filtype støttes
      if (supports(ftype) == 1) {
-	printf("SUpported");
-     } else {
-	printf("File ist not supported");
-     }
 
-
-      //Sjekker om fil eksisterer
-      if (exists(fname) == 1) {
-        printf("Filen eksisterer!");
-
-        //Åpner filen
-        FILE *file = fopen(fname,"r");
-        if(file != NULL) {
+	//Åpner filen
+        FILE *file;
+	//Sjekker om filen eksisterer
+        if(file = fopen(fname, "r")) {
           char line[128];
           while(fgets( line, sizeof line, file) != NULL) {
             fputs ( line, stdout );
           }
           fclose ( file );
-        }
+        
 
       } else {
-        printf("File not found");
+        errorHandler(404);
       }
-
+     } else {
+	errorHandler(415);
+     }
 
 
       fflush(stdout);
