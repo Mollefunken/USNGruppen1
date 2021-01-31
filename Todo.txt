@@ -1,0 +1,19 @@
+0. Finpusse Milepæl 1
+
+1. Utvide MP1 for å levere følgende filer
+  - text/html
+  - text/plain (.txt)
+  - image/png
+  - image/svg
+  - application/xml,
+  - application/xslt+xml
+  - text/css
+  - application/json
+ Antar dette betyr at eks. 192.168.10.117/llama.png skal levere akkurat den filen i systemet.
+  Mulighet: Bruk /etc/mime-types
+
+2. Kjøre serveren i busybox-container
+  Opprette med chroot og unshare for begrensning av tilgang til filer og prosesser.
+  Sende over filer som trengs inn i containeren.
+  
+3. Lage webside for gruppa, med min. ett bilde. Inneholde CSS, HTML
