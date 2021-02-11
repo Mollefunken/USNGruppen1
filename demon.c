@@ -22,7 +22,7 @@ int main()
 			close(1);
 			close(2);
 
-			int file = open("logg.txt", O_WRONLY|O_CREAT, 0666);
+			int file = open("logg.txt", O_WRONLY, 0666);
         		dup2(file, 2);
 
 			char *args[]={"./tjener", NULL};
