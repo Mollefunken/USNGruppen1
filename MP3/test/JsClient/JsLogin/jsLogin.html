@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <!-- <link rel="stylesheet" href="http://81.167.182.254:8888/css/login.css"> -->
+    <link rel="stylesheet" href="css/login.css">
+    <script src="client.js"></script>
+</head>
+<body>
+    <div class="loginBox">
+        <h2>Login</h2>
+        <div id="responseText"></div>
+        <form id="login">
+            <div class="userBox">
+                <label> Username: </label>
+                <input name="email" id="email" type="text" required="" placeholder="E-mail">
+            </div>
+            <div class="userBox">
+                <label> Password: </label>
+                <input type="password" id="password" name="password" required="" placeholder="Password">
+            </div>
+            <a>
+                <input type="button" class="jsButton" onclick="login()" id="loginButton" value="Login"></input>
+            </a>
+        </form>
+    </div>
+</body>
+</html>

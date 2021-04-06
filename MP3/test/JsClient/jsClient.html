@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Poems</title>
+    <script src="client.js"></script>
+</head>
+
+<body onload="validate()">
+    <div class="login_status" id="login_status">
+    </div>
+    <div class="funcBox">
+        <div class="getPoemBox formBox">
+            <form id="getPoem">
+                <button class="jsButton" type="button"
+                    onclick="get(poemID.value); document.getElementById('getPoemID').value = ''">View poem</button>
+                <div class="inputWrap">
+                    <input class="userInput" type="number" name="poemID" id="getPoemID" required=""
+                        placeholder="Poem ID">
+                </div>
+            </form>
+        </div>
+        <div class="getAllBox formBox">
+            <form id="getAll">
+                <button class="jsButton" type="button" onclick="get('');">View all poems</button>
+            </form>
+        </div>
+        <div class="addPoemBox formBox">
+            <form id="addPoem">
+                <input class="jsButton" type="button"
+                    onclick="validateInputAdd(addPoemName.value);  document.getElementById('addPoemName').value = ''"
+                    value="Add poem">
+                <div class="inputWrap">
+                    <input class="userInput" type="text" name="poemName" id="addPoemName" placeholder="Poem name"
+                        required=""></input>
+                </div>
+            </form>
+        </div>
+        <div class="updatePoemBox formBox">
+            <form id="updatePoem">
+                <input class="jsButton" type="button"
+                    onclick="validateInputUpdate(); document.getElementById('updatePoemID').value = '';  document.getElementById('updatePoemName').value = ''"
+                    value="Change poem name">
+                <div class="inputWrap">
+                    <input class="userInput" type="text" name="poemID" id="updatePoemID" required=""
+                        placeholder="Poem ID">
+                    <input class="userInput" type="text" name="poemName" id="updatePoemName" required=""
+                        placeholder="Poem name">
+                </div>
+            </form>
+        </div>
+        <div class="deletePoemBox formBox">
+            <form id="deletePoem">
+                <input class="jsButton" type="button"
+                    onclick="validateInputDelete(deletePoemID.value); document.getElementById('deletePoemID').value = ''"
+                    value="Delete poem">
+
+                <div class="inputWrap">
+                    <input class="userInput" type="text" name="poemID" id="deletePoemID" required=""
+                        placeholder="Poem ID">
+                </div>
+            </form>
+        </div>
+        <div class="deleteAllBox formBox">
+            <form id="deleteAll">
+                <button class="jsButton" type="button" onclick="remove('');">Delete all poems</button>
+            </form>
+        </div>
+
+    </div>
+    <div id="res"></div>
+    <div class=logBox>
+
+        <div class="loginBox">
+            <button onclick="window.location.href='http://81.167.182.254:8888/jsLogin.html'" id="loginButton">
+                Login
+            </button>
+        </div>
+
+        <div class="logOutBox">
+                <button onclick="logout()" id="logoutButton">
+                    Logout
+                </button>
+        </div>
+
+        <div class="homePageBox">
+            <form method="GET" action="http://81.167.182.254:8888/">
+                <button id="homePageButton">
+                    Homepage
+                </button>
+            </form>
+        </div>
+    </div>
+	<script>
+		if('serviceWorker' in navigator) {
+		  	navigator.serviceWorker
+				.register('/sw.js')
+				.then(function() { console.log("Service Worker Registered"); });
+		}
+	</script>
+</body>
+
+</html>

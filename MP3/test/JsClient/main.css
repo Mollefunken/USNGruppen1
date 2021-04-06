@@ -1,0 +1,151 @@
+html {
+    height: 100%;
+    text-align: center;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient( to bottom,  rgba(62,161,219,1) 11.2%, #0a3f7c 100.2% );
+}
+
+form {
+    margin: auto;
+    width: 100%;
+    text-align: left;
+}
+
+button {
+    background-color:#efefef;
+    color: #0a3f7c;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: 1px solid #0a3f7c;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.25s all linear;
+}
+
+button:hover {
+    opacity: 0.8;
+    color: #efefef;
+    background-color: #0a3f7c;
+}
+
+button[type=submit] {
+    background-color: #0a3f7c;
+    color: white;
+    padding: 0.5rem;
+    margin: 0;
+    border: 1px solid #1f1f1f;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    min-width: 8.75rem;
+    flex: 0;
+    white-space: nowrap;
+    transition: 0.25s all linear;
+}
+
+button[type=submit]:hover {
+    opacity: 0.8;
+    background-color: #efefef;
+    color:#0a3f7c;
+}
+
+.backButton {
+    width: 5rem;
+}
+
+.responseText {
+    margin: auto;
+    text-align: center;
+    width: 20%;
+    padding: 3rem;
+}
+
+.statusImage {
+    width: 2rem;
+    border-radius: 50%;
+    margin-bottom: -0.35rem;
+}
+
+.statusImage.check {
+    background-color: rgb(90, 219, 90);
+}
+
+.statusImage.cross {
+    background-color: rgb(192, 116, 116);
+}
+
+.userInput {
+    padding: 0.5rem;    
+    margin-right: 1rem;
+    border-radius: 0.25rem;
+}
+
+.userInput:focus {
+    outline: none;
+}
+
+.formBox form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inputWrap {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.funcBox {
+    margin: auto;
+    text-align: left;
+    width: 40%;
+}
+
+.login_status {
+    width: 90%;
+    margin: auto;
+    padding: 1%;
+    font-size: 1.5rem;
+    color: #002857;
+    text-align: center;
+}
+
+.getPoemBox, .getAllBox, .addPoemBox, .updatePoemBox, .deletePoemBox, .deleteAllBox {
+    margin: 5%;
+    padding: 1%;
+}
+
+.logBox {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+
+.backToMainButton {
+    width: 10rem;
+}
+
+.jsButton {
+    background-color: #0a3f7c;
+    color: white;
+    padding: 0.5rem;
+    margin: 0;
+    border: 1px solid #1f1f1f;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    min-width: 8.75rem;
+    flex: 0;
+    white-space: nowrap;
+    transition: 0.25s all linear;
+}
+
+.jsButton:hover {
+    opacity: 0.8;
+    background-color: #efefef;
+    color:#0a3f7c;
+}
+
