@@ -1,0 +1,47 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: linear-gradient(rgba(50,50,255,0.3), rgba(170,200,255,0.6)), url("./rain.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+body, html {
+    height: 100%;
+}
+
+label {
+    font-size: 3rem;
+    color: white;
+}
+
+button {
+    background-color:#0a3f7c;
+    color: #efefef;
+    padding: 14px 2px;
+    margin: 8px 0;
+    border: 1px solid #0a3f7c;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    width: 7rem;
+    transition: 0.25s all linear;
+}
+
+img {
+      border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 750px;
+}
+
+
+button:hover {
+    opacity: 0.8;
+    color: #0a3f7c;
+    background-color: #efefef;
+}

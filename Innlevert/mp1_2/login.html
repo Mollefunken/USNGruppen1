@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>Poems</title>
+<!--     <link rel="stylesheet" href="http://158.248.21.214/styling2.css>-->
+</head>
+
+<body>
+<div>validate</div>
+<form id="login" action="http://158.248.21.214:8080/ui.sh" method="POST">
+<!--  <div class="imgcontainer">
+    <img src="158.248.21.244/img_avatar2.png" alt="Avatar" class="avatar">
+  </div> -->
+  <div class="container" style="text-align: center;">
+    <input type="hidden" id="name" name="name" value="login">
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+	<br>
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+    <button type="submit">Login</button>
+<!--    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label> -->
+  </div>
+  <div class="container" style="color:#f1f1f1">
+    <button onclick="window.location.href=`http://158.248.21.214:8080/ui.sh`">Cancel</button>
+<!--    <span class="psw">Forgot <a href="#">password?</a></span>-->
+  </div>
+</form>
+</body>
+</html>

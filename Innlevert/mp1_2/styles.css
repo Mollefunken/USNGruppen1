@@ -1,0 +1,14 @@
+body {
+	background-color: lime;
+	color: blue;
+	background-image: url('toad.png');
+}
+
+h1 {
+	color: purple;
+	text-align: center;
+}
+
+ul#menu li {
+  display:inline;
+}
