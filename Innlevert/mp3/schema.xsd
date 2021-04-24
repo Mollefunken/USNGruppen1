@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="bruker">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="epostadresse" type="xs:string"/>
+      <xs:element name="passordhash" type="xs:string"/>
+      <xs:element name="fornavn" type="xs:string"/>
+      <xs:element name="etternavn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="sesjon">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="sesjonsID" type="xs:string"/>
+      <xs:element name="epostadresse" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="dikt">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="diktID" type="xs:integer"/>
+      <xs:element name="dikt" type="xs:string"/>
+      <xs:element name="epostadresse" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+</xs:schema>

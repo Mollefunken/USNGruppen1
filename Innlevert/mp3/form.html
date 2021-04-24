@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Poems</title>
+   <link rel="stylesheet" href="http://158.248.21.214/styling.css">
+   <style>
+	.placeHolder { font-weight: bold; color: red; }
+   </style> 
+</head>
+
+<body>
+	<header>
+                <nav id="navbar">
+                        <div class="top">
+                                <h1 class="logo"><a href="http://158.248.21.214">Diktbase</a></h1>
+                        </div>
+                </nav>
+        </header>
+
+
+	<div class="placeHolder">validate</div><br><br>
+
+        <div class="getALLPoemsBox">
+                <form id="getPoemID" action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        View all poems
+                   	<input type="hidden" id="GetPoemIDName" name="name" value="getPoem">
+                        <input type="submit" value="Submit"><br><br>
+                </form>
+        </div>
+
+	<div class="getPoemBox">
+                <form id="getPoem" action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        View poem
+			<input type="hidden" id="name" name="name" value="getPoem">
+                        <input type="text" name="Poem ID" placeholder="Poem ID">
+                        <input type="submit" value="Submit"><br><br> 
+                </form>
+        </div>
+
+
+
+        <divclass="addPoemBox">
+                <form action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        Add Poem
+			<input type="hidden" id="name" name="name" value="addPoem">
+                        <input type="text" name="post1" placeholder="write the poem">
+                        <input type="submit" value="Submit"><br><br>
+                </form>
+	</div>
+
+	</div class="changePoemBox">        
+		<form action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        Change Poem
+			<input type="hidden" id="name" name="name" value="changePoem">
+                        <input type="text" name="post1" placeholder="Poem ID">
+			<input type="text" name="post1" placeholder="Poem input">
+                        <input type="submit" value="Submit"><br><br> 
+                </form>
+
+        </div>
+
+	 <div class="deletePoemBox">
+                <form action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        Delete Your Poem
+			<input type="hidden" id="name" name="name" value="deletePoem">
+                        <input type="text" name="poemID" placeholder="Your Poem ID">
+                        <input type="submit" value="Submit"><br><br>
+                </form>
+        </div>
+
+	<div class="deleteAllPoemBox">
+                <form id="getAllPoems" action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        <input type="hidden" id="name" name="name" value="deletePoem">
+                        <input type="submit" value="Delete All Poems"><br><br>
+                </form>
+        </div>
+	<div class="loginBox">
+                <form id="showLogin" action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        <input type="hidden" id="name" name="name" value="showLogin">
+                        <input type="submit" value="Login"><br><br>
+                </form>
+        </div>
+	<div class="logoutBox">
+                <form id="logout" action="http://158.248.21.214:8080/ui.sh" method="POST">
+                        <input type="hidden" id="name" name="name" value="logout">
+                        <input type="submit" value="Logout"><br><br>
+                </form>
+        </div>
+
+
+
+
+
+</body>
+</html>
