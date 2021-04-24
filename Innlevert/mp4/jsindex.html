@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>Poems</title>
+        <link rel="stylesheet" href="http://158.248.21.214/jsstyle.css">
+	<script src="fetch.js"></script>
+<!--	<script src="update.js"></script>	-->
+	<script src="main.js"></script>
+</head>
+
+<body onload="validate()">
+	<header>
+		<nav id="navbar">
+			<div class="container">
+				<h1 class="logo"><a href="http://158.248.21.214">Diktbase</a></h1>
+				<ul>
+					<li id="loggedInAs">Ikke logget inn</li>
+					<li id="email-valid" class="hide"></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+<!--        <div>validate</div>
+
+	<p id="testVerdi">Tester</p>
+	<button onclick="testParagraph()" id="testButton">Test-knapp</button>
+	<br><br>
+-->
+<br>
+	<div class="getAllPoemsBox">
+                <button onclick="getAllPoems()" id="getAllPoems">
+                        View All Poems
+                </button><br><br>
+        </div>
+	
+	View poem: <input type="number" id="getPoem" placeholder="DiktID">
+	<button onclick="getPoem()">Submit</button><br><br>
+
+        <divclass="addPoemBox">
+        	Add Poem
+                <input type="textarea" name="post1" id="leggTilDikt" placeholder="write the poem">
+                <button onclick="addPoem()" id="addPoemButton">Submit</button>
+        </div>
+	<br><br>
+
+
+        </div class="changePoemBox">
+                        Change Poem
+                        <input type="text" id="updatePoemId" placeholder="Poem ID">
+                        <input type="textarea" id="updatePoemText" placeholder="Poem input">
+                        <button onclick="updatePoem()" id="updatePoemButton">Submit</button><br><br>
+
+        </div>
+
+	Delete poem: <input type="number" id="deletePoem" placeholder="DiktID">
+        <button onclick="deletePoem()">Submit</button><br><br>
+
+	<div class="deleteAllPoemsBox">
+                <button onclick="deleteAllPoems()" id="deleteAllPoems">
+                        Delete All Poems
+                </button><br><br>
+        </div>
+
+        </div>
+        <div class="logoutBox">
+                <button onclick="logout();window.location.reload();" id="logoutButton">
+			Logout
+		</button>
+	</div>		
+
+<button class="open-button" onclick="openForm()">Login</button>
+
+<div class="form-popup" id="myForm">
+  <form action="/action_page.php" class="form-container">
+    <h1>Login</h1>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" id="loginEmail" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" id="loginPassword" required>
+
+    <button type="button" onclick="login();window.location.reload();" class="btn">Login</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+<div id="ResultContainer">
+  <p id="ResultBox"></p>
+</div>
+
+
+<!--
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script>
+-->
+</body>
+</html>
