@@ -247,6 +247,7 @@ int filtype(char filnavn[], char *type)
 		{
 			if(text[0] != '#')
 			{
+				//Splitter tekstlinje med \t som delimiter, neste felt legge i endelse
 				char *t_navn = strtok(text, "\t");
 				char *endelse = strtok(NULL, "");
 
