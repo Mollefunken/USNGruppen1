@@ -70,7 +70,7 @@ int main ()
 	{
     		// Aksepterer mottatt forespørsel
     		ny_sd = accept(sd, (struct sockaddr *)&fj_adr, &adr_len);
-	
+
     		if(0==fork())
 		{
 			char header[50] = "HTTP/1.1";
@@ -95,18 +95,35 @@ int main ()
 			{
 				size = fil_eksisterer(filnavn, kode);
       			}
+			else if(filtype(filnavn, type) == -1)
+                        {
+                                if (fil_eksisterer(filnavn, kode) != 0)  
+				{
+					writebody(filnavn);
+					printErr("kobler fra klient");
+
+                        		close(2);
+                        		shutdown(ny_sd, SHUT_RDWR);
+                        		exit(0);
+                        		return 0;
+				}
+                        }
 			else
 			{
-      				setCode(422, kode);
+      				setCode(415, kode);
 			}
 
-			strcat(header, kode);
-			strcat(type, charset);
 
-			printf("%s", header);
+			strcat(header, kode);
+                        strcat(type, charset);
+
+                        printf("%s", header);
+
+
 
 			if(size != 0)
 			{
+				printf("%s", header);
 				printf("%s", type);
 				printf("%s%d\n", content_length, size);
 				printf("\n");
@@ -114,8 +131,9 @@ int main ()
 				writebody(filnavn);
 			}
 			else
+			{
 				fflush(stdout);
-
+			}
 			printErr("kobler fra klient");
 
       			close(2);
@@ -235,8 +253,7 @@ int filtype(char filnavn[], char *type)
 
 	if(strcmp(filtype, "asis") == 0)
 	{
-		strcat(type, "text/plain");
-		return 0;
+		return -1;
 	}
 
 	typer = fopen("mime.types", "r");
@@ -247,7 +264,6 @@ int filtype(char filnavn[], char *type)
 		{
 			if(text[0] != '#')
 			{
-				//Splitter tekstlinje med \t som delimiter, neste felt legge i endelse
 				char *t_navn = strtok(text, "\t");
 				char *endelse = strtok(NULL, "");
 
@@ -328,8 +344,8 @@ void setCode(int feilKode, char kode[])
 {
 	switch(feilKode)
 	{
-		case 422:
-			strcat(kode, "422 Unprocessable Entity\n");
+		case 415:
+			strcat(kode, "415 Unprocessable Entity\n");
 			break;
 		case 404:
 			strcat(kode, "404 Not Found\n");
